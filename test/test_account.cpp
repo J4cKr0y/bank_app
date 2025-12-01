@@ -28,3 +28,46 @@ TEST_CASE("Account creation and initialization", "[account][create]") {
     // Nettoyage (important !)
     free(new_account);
 }
+
+// -----------------------------------------------------
+// TEST CASE 2 : Dépôt d'argent (Deposit)
+// -----------------------------------------------------
+TEST_CASE("Deposit function correctly increases balance", "[account][deposit]") {
+    // GIVEN : Un compte avec un solde initial
+    Account* account = create_account(1002, 56, 100.00);
+    AccountBalance deposit_amount = 50.50;
+    AccountBalance initial_balance = account->balance;
+
+    // WHEN : On effectue un dépôt valide
+    int success = deposit(account, deposit_amount);
+
+    // THEN 1 : L'opération doit réussir
+    REQUIRE(success == 1); 
+
+    // THEN 2 : Le nouveau solde doit être l'ancien solde + le montant du dépôt
+    AccountBalance expected_balance = initial_balance + deposit_amount;
+    REQUIRE(account->balance == expected_balance);
+
+    // Nettoyage
+    free(account);
+}
+
+// -----------------------------------------------------
+// TEST CASE 3 : Dépôt invalide (Montant négatif ou nul)
+// -----------------------------------------------------
+TEST_CASE("Deposit function handles invalid amounts (zero or negative)", "[account][deposit][edge_case]") {
+    // GIVEN : Un compte avec un solde initial
+    Account* account = create_account(1003, 57, 100.00);
+    AccountBalance initial_balance = account->balance;
+
+    // WHEN & THEN : Tenter un dépôt négatif doit échouer et ne pas modifier le solde
+    REQUIRE(deposit(account, -10.00) == 0);
+    REQUIRE(account->balance == initial_balance);
+
+    // WHEN & THEN : Tenter un dépôt de zéro doit échouer et ne pas modifier le solde
+    REQUIRE(deposit(account, 0.00) == 0);
+    REQUIRE(account->balance == initial_balance);
+    
+    // Nettoyage
+    free(account);
+}

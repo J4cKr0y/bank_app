@@ -6,7 +6,7 @@
 # FetchContent_MakeAvailable(Catch2)
 
 # Activation explicite du support C++ 
-# Ceci est crucial car les fichiers de tests (.cpp) sont en C++.
+# Obligatoire car les fichiers de tests (.cpp) sont en C++.
 enable_language(CXX)
 
 # --- Fichiers Sources C++ des Tests ---

@@ -14,6 +14,7 @@ enable_language(CXX)
 set(CORE_TEST_SOURCES 
     test_sorting.cpp 
     test_search.cpp
+    test_account.cpp
 )
 
 # --- Exécutable de Test ---

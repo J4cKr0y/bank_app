@@ -1,15 +1,22 @@
 #ifndef ACCOUNT_H
 #define ACCOUNT_H
 
-// Définition de la structure d'un Compte
+#include <stdbool.h> // Pour utiliser 'bool', 'true', 'false'
+
 typedef struct {
-    int id;             // Identifiant unique du compte
-    char owner[100];    // Nom du propriétaire (max 99 caractères + fin de chaîne)
-    double balance;     // Solde du compte (attention aux arrondis avec double, mais ok pour débuter)
+    int id;
+    char owner[100];
+    double balance;
 } Account;
 
-// Fonction pour créer un nouveau compte
-// Elle prend l'ID et le nom, et renvoie une structure Account initialisée.
 Account create_account(int id, const char* owner);
+
+// Ajoute un montant au solde du compte.
+// Prend un pointeur (Account*) pour modifier la structure originale.
+void deposit(Account* account, double amount);
+
+// Tente de retirer un montant.
+// Retourne true si succès, false si fonds insuffisants ou montant invalide.
+bool withdraw(Account* account, double amount);
 
 #endif // ACCOUNT_H

@@ -25,3 +25,59 @@ TEST_CASE("Account creation initializes values correctly", "[account]") {
     REQUIRE(account.balance == 0.0);
 }
 
+TEST_CASE("Deposit increases account balance", "[account]") {
+    // GIVEN : Un compte vide
+    Account account = create_account(1, "Bob");
+    
+    // WHEN : On dépose 100.0
+    // Note : On passe l'adresse du compte (&account) pour le modifier
+    deposit(&account, 100.0);
+
+    // THEN : Le solde doit être de 100.0
+    REQUIRE(account.balance == 100.0);
+    
+    // WHEN : On dépose encore 50.0
+    deposit(&account, 50.0);
+
+    // THEN : Le solde doit s'accumuler
+    REQUIRE(account.balance == 150.0);
+}
+
+TEST_CASE("Withdraw decreases account balance when funds are sufficient", "[account]") {
+    // GIVEN : Un compte avec 200.0
+    Account account = create_account(1, "Bob");
+    deposit(&account, 200.0);
+
+    // WHEN : On retire 50.0
+    bool success = withdraw(&account, 50.0);
+
+    // THEN : L'opération réussit et le solde diminue
+    REQUIRE(success == true);
+    REQUIRE(account.balance == 150.0);
+}
+
+TEST_CASE("Withdraw fails when funds are insufficient", "[account]") {
+    // GIVEN : Un compte avec seulement 20.0
+    Account account = create_account(1, "Bob");
+    deposit(&account, 20.0);
+
+    // WHEN : On essaie de retirer 50.0
+    bool success = withdraw(&account, 50.0);
+
+    // THEN : L'opération échoue et le solde ne bouge pas
+    REQUIRE(success == false);
+    REQUIRE(account.balance == 20.0);
+}
+
+TEST_CASE("Cannot deposit or withdraw negative amounts", "[account][edge_case]") {
+    Account account = create_account(1, "Bob");
+    deposit(&account, 100.0);
+
+    deposit(&account, -50.0); // Ne devrait rien faire
+    REQUIRE(account.balance == 100.0);
+
+    bool success = withdraw(&account, -10.0); // Ne devrait pas marcher
+    REQUIRE(success == false);
+    REQUIRE(account.balance == 100.0);
+}
+

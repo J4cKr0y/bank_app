@@ -31,7 +31,7 @@ target_include_directories(run_core_tests PUBLIC ${CMAKE_SOURCE_DIR}/src)
 
 # --- Lien des Librairies (Linker) ---
 # 4. Lier l'exécutable avec notre nouvelle librairie C "core_utils"
-target_link_libraries(run_core_tests PRIVATE core_utils) 
+target_link_libraries(run_core_tests PRIVATE core_utils account_lib) 
 
 # --- Ajouter une définition de préprocesseur --- 
 # 5. Fixe les erreurs sysconf/constexpr et 'non-constexpr' 

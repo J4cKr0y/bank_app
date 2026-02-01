@@ -1,5 +1,7 @@
-﻿# Créer une librairie (que nous renommons "core_utils" pour refléter tri ET recherche)
+﻿# Créer une librairie 
 add_library(core_utils sorting.c search.c)
+add_subdirectory(account) 
+
 
 # --- Ajout du fichier 'account.c' --- 
 target_sources(core_utils PRIVATE account/account.c )

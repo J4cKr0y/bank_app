@@ -1,55 +1,22 @@
-﻿#include <stdlib.h> // Nécessaire pour malloc 
-#include "account/account.h" 
+#include "account.h"
+#include <string.h> // Nécessaire pour copier le nom (strncpy)
 
-/*
- * Implémentation : Crée un compte en allouant la mémoire
- * et en initialisant ses champs.
- */
-Account* create_account(int id, int client_id, AccountBalance initial_balance) {
-    
-    // 1. Allouer l'espace mémoire pour la nouvelle structure Account
-    Account* new_account = (Account*)malloc(sizeof(Account));
+Account create_account(int id, const char* owner) {
+    Account new_account;
 
-    // Vérifier si l'allocation a échoué 
-    if (new_account == NULL) {
-        return NULL;
-    }
+    // 1. Assigner l'ID
+    new_account.id = id;
+
+    // 2. Initialiser le solde à 0
+    new_account.balance = 0.0;
+
+    // 3. Copier le nom du propriétaire
+    // On utilise strncpy pour éviter de dépasser la taille du tableau 'owner' (sécurité).
+    // sizeof(new_account.owner) - 1 laisse une place pour le caractère de fin de chaîne '\0'.
+    strncpy(new_account.owner, owner, sizeof(new_account.owner) - 1);
     
-    // 2. Initialiser les champs avec les valeurs fournies
-    new_account->id = id;
-    new_account->client_id = client_id;
-    new_account->balance = initial_balance;
-    
-    // 3. Renvoyer le pointeur vers la structure initialisée
+    // On s'assure que la chaîne est bien terminée proprement.
+    new_account.owner[sizeof(new_account.owner) - 1] = '\0';
+
     return new_account;
-}
-
-
-/*
- * Implémentation : Dépose un montant sur le compte.
- */
-int deposit(Account* account, AccountBalance amount) {
-    // 1. Vérification de la validité du montant
-    // Un montant doit être strictement positif pour être déposé.
-    if (amount <= 0) {
-        return 0; // Échec
-    }
-    
-    // 2. Vérification de la validité du compte
-    if (account == NULL) {
-        return 0; // Échec
-    }
-
-    // 3. Mise à jour du solde
-    account->balance += amount;
-    
-    return 1; // Succès
-}
-
-
-// Implémentations minimales pour éviter les erreurs du linker
-// TO DO //
-
-int withdraw(Account* account, AccountBalance amount) {
-    return 0; 
 }

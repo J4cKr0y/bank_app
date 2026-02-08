@@ -16,6 +16,7 @@ set(CORE_TEST_SOURCES
     test_search.cpp
     test_account.cpp
     test_transaction.cpp
+    test_transfer.cpp
 )
 
 # --- Exécutable de Test ---
@@ -35,6 +36,7 @@ target_include_directories(run_core_tests PUBLIC ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(run_core_tests PRIVATE core_utils 
   account_lib
   transaction_lib
+  system_lib
 ) 
 
 # --- Ajouter une définition de préprocesseur --- 

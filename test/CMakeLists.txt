@@ -6,7 +6,7 @@
 # FetchContent_MakeAvailable(Catch2)
 
 # Activation explicite du support C++ 
-# Ceci est crucial car les fichiers de tests (.cpp) sont en C++.
+# Obligatoire car les fichiers de tests (.cpp) sont en C++.
 enable_language(CXX)
 
 # --- Fichiers Sources C++ des Tests ---
@@ -14,6 +14,8 @@ enable_language(CXX)
 set(CORE_TEST_SOURCES 
     test_sorting.cpp 
     test_search.cpp
+    test_account.cpp
+    test_transaction.cpp
 )
 
 # --- Exécutable de Test ---
@@ -30,7 +32,10 @@ target_include_directories(run_core_tests PUBLIC ${CMAKE_SOURCE_DIR}/src)
 
 # --- Lien des Librairies (Linker) ---
 # 4. Lier l'exécutable avec notre nouvelle librairie C "core_utils"
-target_link_libraries(run_core_tests PRIVATE core_utils) 
+target_link_libraries(run_core_tests PRIVATE core_utils 
+  account_lib
+  transaction_lib
+) 
 
 # --- Ajouter une définition de préprocesseur --- 
 # 5. Fixe les erreurs sysconf/constexpr et 'non-constexpr' 

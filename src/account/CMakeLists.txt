@@ -8,4 +8,4 @@ target_include_directories(account_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 target_link_libraries(account_lib PRIVATE transaction_lib)
 
 # On ajoute auth_lib
-target_link_libraries(account_lib PRIVATE transaction_lib auth_lib) 
+target_link_libraries(account_lib PRIVATE transaction_lib auth_lib common_lib) 

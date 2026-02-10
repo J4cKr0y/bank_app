@@ -40,8 +40,15 @@ void deposit(Account* account, double amount) {
     }
 }
 
-bool withdraw(Account* account, double amount) {
-    if (amount <= 0) return false;
+BankStatus withdraw(Account* account, double amount) {
+    // Validation 1 : Le montant
+    if (amount <= 0) {
+        return ERR_INVALID_AMOUNT; 
+    }
+	// Validation 2 : Le solde
+    if (account->balance < amount) {
+        return ERR_INSUFFICIENT_FUNDS; 
+    }
 
     if (account->balance >= amount) {
         account->balance -= amount;
@@ -55,7 +62,7 @@ bool withdraw(Account* account, double amount) {
             account->history[account->transaction_count] = t;
             account->transaction_count++;
         }
-        return true;
+        return STATUS_SUCCESS;
     }
     return false;
 }

@@ -27,24 +27,27 @@ static double memory_get_balance(void* context, int id) {
 }
 
 // Implémentation concrète de "transfer"
-static bool memory_transfer(void* context, int from_id, int to_id, double amount) {
+static BankStatus memory_transfer(void* context, int from_id, int to_id, double amount) {
     MemoryDatabase* db = (MemoryDatabase*)context;
     
     Account* source = find_account(db, from_id);
     Account* dest = find_account(db, to_id);
 
     // Vérifications de base
-    if (!source || !dest) return false; // Un des comptes n'existe pas
+    if (!source) return ERR_ACCOUNT_NOT_FOUND; // Un des comptes n'existe pas
+	if (!dest) return ERR_ACCOUNT_NOT_FOUND;
 
-    // On utilise nos fonctions existantes (Réutilisation du code !)
-    // 1. On essaie de retirer de la source
-    if (withdraw(source, amount)) {
-        // 2. Si ça marche, on dépose sur la destination
+    // On tente le retrait sur la source
+    BankStatus result = withdraw(source, amount);
+    
+    // Si le retrait a marché, on dépose
+    if (result == STATUS_SUCCESS) {
         deposit(dest, amount);
-        return true;
-    }
-
-    return false; // Fonds insuffisants
+        return STATUS_SUCCESS;
+    } 
+    
+    // Sinon, on renvoie l'erreur du retrait (ex: ERR_INSUFFICIENT_FUNDS)
+    return result; 
 }
 
 // --- Constructeur du Driver ---

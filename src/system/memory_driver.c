@@ -89,3 +89,12 @@ void setup_test_accounts(BankDriver* driver) {
     Account bob = create_account(1002, "Bob", "0000");
     db->accounts[db->count++] = bob;
 }
+
+// Permet d'ajouter un compte existant dans la mémoire du driver (utile au chargement)
+void driver_add_account(BankDriver* driver, Account account) {
+    MemoryDatabase* db = (MemoryDatabase*)driver->context;
+    if (db->count < MAX_ACCOUNTS) {
+        db->accounts[db->count] = account; // Copie le compte
+        db->count++;
+    }
+}

@@ -21,13 +21,18 @@ add_library(core_utils
 # PUBLIC permet aux tests et aux autres modules d'accéder à sorting.h et search.h.
 target_include_directories(core_utils PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-# ==============================================================================
-# NOTES SUR L'ORGANISATION :
-# ==============================================================================
-# L'ordre d'inclusion est important si des librairies dépendent d'autres.
-# - account_lib (dans src/account) dépend de transaction_lib.
-# - system_lib (dans src/system) dépend de account_lib.
-# - persistence_lib (dans src/persistence) dépend de account_lib.
-#
-# CMake gère automatiquement l'ordre de compilation grâce aux commandes
-# target_link_libraries que nous avons mises dans les sous-dossiers.
+# --- L'APPLICATION ---
+add_executable(bank_app main.c)
+
+target_include_directories(bank_app PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+# On lie l'exécutable avec TOUTES nos features
+target_link_libraries(bank_app 
+    PRIVATE 
+    core_utils 
+    account_lib 
+    transaction_lib 
+    auth_lib
+    system_lib 
+    persistence_lib
+)

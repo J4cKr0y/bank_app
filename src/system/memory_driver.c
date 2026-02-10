@@ -2,14 +2,6 @@
 #include "../account/account.h"
 #include <stdio.h>
 
-#define MAX_ACCOUNTS 10
-
-// Notre "Base de données" en mémoire RAM
-typedef struct {
-    Account accounts[MAX_ACCOUNTS];
-    int count;
-} MemoryDatabase;
-
 // --- Fonctions internes (cachées) ---
 
 // Trouve un pointeur vers un compte dans la base de données via son ID

@@ -190,9 +190,9 @@ int main() {
     printf("Sauvegarde des données...\n");
     
     // On doit récupérer tous les comptes du driver pour les sauver
-    MemoryDatabase* db = (MemoryDatabase*)bank.context;
+    MemoryDatabase* db_final = (MemoryDatabase*)bank.context;
     
-    if (storage.save(storage.context, db->accounts, db->count)) {
+    if (storage.save(storage.context, db_final->accounts, db_final->count)) {
         printf("✅ Données sauvegardées dans %s\n", DB_FILE);
     } else {
         printf("❌ Erreur lors de la sauvegarde !\n");

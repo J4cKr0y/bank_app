@@ -6,6 +6,7 @@
 # Chaque dossier doit avoir son propre fichier CMakeLists.txt.
 add_subdirectory(account)
 add_subdirectory(transaction)
+add_subdirectory(auth)
 add_subdirectory(system)
 add_subdirectory(persistence)
 

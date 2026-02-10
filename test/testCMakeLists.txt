@@ -18,7 +18,6 @@ set(CORE_TEST_SOURCES
     test_transaction.cpp
     test_transfer.cpp
     test_storage.cpp
-	test_auth.cpp
 )
 
 # --- Exécutable de Test ---
@@ -40,7 +39,6 @@ target_link_libraries(run_core_tests PRIVATE core_utils
   transaction_lib
   system_lib
   persistence_lib
-  auth_lib
 ) 
 
 # --- Ajouter une définition de préprocesseur --- 

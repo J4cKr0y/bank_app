@@ -24,10 +24,11 @@ static bool csv_save(void* context, Account* accounts, int count) {
     // 3. Boucle sur les comptes
     for (int i = 0; i < count; i++) {
         // Format CSV : 1,Batman,1000.00
-        fprintf(file, "%d,%s,%.2f\n", 
+        fprintf(file, "%d,%s,%.2f,%lu\n", 
                 accounts[i].id, 
                 accounts[i].owner, 
-                accounts[i].balance);
+                accounts[i].balance,
+                accounts[i].pin_hash);
     }
 
     // 4. Fermer le fichier (Très important !)
@@ -57,10 +58,11 @@ static int csv_load(void* context, Account* accounts_buffer, int max_size) {
     // %99[^,] = lire une chaine de max 99 caractères tant qu'on ne voit pas de virgule (pour les noms avec espaces)
     // %lf = un double (long float)
     while (loaded_count < max_size && 
-           fscanf(file, "%d,%99[^,],%lf\n", 
+           fscanf(file, "%d,%99[^,],%lf,%lu\n", 
                   &accounts_buffer[loaded_count].id, 
                   accounts_buffer[loaded_count].owner, 
-                  &accounts_buffer[loaded_count].balance) == 3) {
+                  &accounts_buffer[loaded_count].balance,
+              &accounts_buffer[loaded_count].pin_hash) == 4) {
         
         // On initialise les autres champs du compte (historique vide pour l'instant)
         accounts_buffer[loaded_count].transaction_count = 0;

@@ -6,3 +6,6 @@ target_include_directories(account_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 # On dit que "account_lib" a besoin de "transaction_lib" pour fonctionner.
 target_link_libraries(account_lib PRIVATE transaction_lib)
+
+# On ajoute auth_lib
+target_link_libraries(account_lib PRIVATE transaction_lib auth_lib) 

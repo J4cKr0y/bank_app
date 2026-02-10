@@ -12,7 +12,7 @@ TEST_CASE("Account creation initializes values correctly", "[account]") {
     const char* client_name = "Alice Dupont";
 
     // WHEN : On crée le compte
-    Account account = create_account(account_id, client_name);
+    Account account = create_account(account_id, client_name, "1234");
 
     // THEN : Les informations doivent être correctes
     REQUIRE(account.id == account_id);
@@ -27,7 +27,7 @@ TEST_CASE("Account creation initializes values correctly", "[account]") {
 
 TEST_CASE("Deposit increases account balance", "[account]") {
     // GIVEN : Un compte vide
-    Account account = create_account(1, "Bob");
+    Account account = create_account(1, "Bob", "0000");
     
     // WHEN : On dépose 100.0
     // Note : On passe l'adresse du compte (&account) pour le modifier
@@ -45,7 +45,7 @@ TEST_CASE("Deposit increases account balance", "[account]") {
 
 TEST_CASE("Withdraw decreases account balance when funds are sufficient", "[account]") {
     // GIVEN : Un compte avec 200.0
-    Account account = create_account(1, "Bob");
+    Account account = create_account(1, "Bob", "0000");
     deposit(&account, 200.0);
 
     // WHEN : On retire 50.0
@@ -58,7 +58,7 @@ TEST_CASE("Withdraw decreases account balance when funds are sufficient", "[acco
 
 TEST_CASE("Withdraw fails when funds are insufficient", "[account]") {
     // GIVEN : Un compte avec seulement 20.0
-    Account account = create_account(1, "Bob");
+    Account account = create_account(1, "Bob", "0000");
     deposit(&account, 20.0);
 
     // WHEN : On essaie de retirer 50.0
@@ -70,7 +70,7 @@ TEST_CASE("Withdraw fails when funds are insufficient", "[account]") {
 }
 
 TEST_CASE("Cannot deposit or withdraw negative amounts", "[account][edge_case]") {
-    Account account = create_account(1, "Bob");
+    Account account = create_account(1, "Bob", "0000");
     deposit(&account, 100.0);
 
     deposit(&account, -50.0); // Ne devrait rien faire
@@ -83,7 +83,7 @@ TEST_CASE("Cannot deposit or withdraw negative amounts", "[account][edge_case]")
 
 TEST_CASE("Deposit adds a transaction to history", "[account][history]") {
     // GIVEN : Un compte tout neuf
-    Account account = create_account(1, "Alice");
+    Account account = create_account(1, "Alice", "1234");
     
     // Vérifions que l'historique est vide au début
     REQUIRE(account.transaction_count == 0);

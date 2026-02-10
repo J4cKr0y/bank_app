@@ -165,14 +165,19 @@ int main() {
                 printf("\n💰 Votre solde est de : %.2f €\n", balance);
             
             } else if (choice == 2) {
-                int dest_id = get_int("ID du destinataire : ");
-                double amount = get_double("Montant à virer : ");
+        int dest_id = get_int("ID du destinataire : ");
+        double amount = get_double("Montant à virer : ");
 
-                if (bank.transfer(bank.context, current_user_id, dest_id, amount)) {
-                    printf("✅ Virement effectué avec succès !\n");
-                } else {
-                    printf("❌ Échec du virement (Fonds insuffisants ou destinataire invalide).\n");
-                }
+        // On capture le statut retourné par la fonction
+        BankStatus status = bank.transfer(bank.context, current_user_id, dest_id, amount);
+
+        if (status == STATUS_SUCCESS) {
+            printf("✅ Virement effectué avec succès !\n");
+        } else {
+            // On affiche le message d'erreur précis grâce à notre helper
+            printf("❌ Échec : %s\n", get_status_message(status));
+        }
+    }
 
             } else if (choice == 3) {
                 current_user_id = -1;

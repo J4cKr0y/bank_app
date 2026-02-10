@@ -5,6 +5,8 @@
 // On inclut la définition des transactions pour pouvoir les utiliser ici
 #include "../transaction/transaction.h" 
 
+#include "../common/status.h"
+
 #define MAX_HISTORY 100 // On limite l'historique à 100 opérations pour l'instant
 
 typedef struct {
@@ -28,6 +30,6 @@ void deposit(Account* account, double amount);
 
 // Tente de retirer un montant.
 // Retourne true si succès, false si fonds insuffisants ou montant invalide.
-bool withdraw(Account* account, double amount);
+BankStatus withdraw(Account* account, double amount);
 
 #endif // ACCOUNT_H

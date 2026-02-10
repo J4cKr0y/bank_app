@@ -4,6 +4,7 @@
 // On inclut le header de notre future feature
 extern "C" {
     #include "account/account.h"
+	#include "common/status.h"
 }
 
 TEST_CASE("Account creation initializes values correctly", "[account]") {
@@ -97,4 +98,19 @@ TEST_CASE("Deposit adds a transaction to history", "[account][history]") {
     // Vérifions le contenu du "ticket"
     REQUIRE(account.history[0].type == DEPOSIT);
     REQUIRE(account.history[0].amount == 100.0);
+}
+
+TEST_CASE("Withdraw returns precise error codes", "[account][error]") {
+    Account acc = create_account(1, "Test", "0000");
+    deposit(&acc, 50.0);
+
+    // 1. Cas nominal (Succès)
+    REQUIRE(withdraw(&acc, 20.0) == STATUS_SUCCESS); 
+
+    // 2. Cas Fonds insuffisants
+    REQUIRE(withdraw(&acc, 1000.0) == ERR_INSUFFICIENT_FUNDS);
+    REQUIRE(acc.balance == 30.0); // Le solde n'a pas bougé (50 - 20)
+
+    // 3. Cas Montant invalide
+    REQUIRE(withdraw(&acc, -5.0) == ERR_INVALID_AMOUNT);
 }

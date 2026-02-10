@@ -9,6 +9,7 @@ add_subdirectory(transaction)
 add_subdirectory(auth)
 add_subdirectory(system)
 add_subdirectory(persistence)
+add_subdirectory(common)
 
 # 2. On crée la bibliothèque de base (Utilitaires : Tri et Recherche).
 # Cette bibliothèque regroupe les outils algorithmiques du projet.
@@ -35,4 +36,5 @@ target_link_libraries(bank_app
     auth_lib
     system_lib 
     persistence_lib
+	common_lib
 )

@@ -2,6 +2,7 @@
 #define BANK_INTERFACE_H
 
 #include <stdbool.h>
+#include "../common/status.h"
 
 // Définition générique du "Driver".
 // C'est comme une télécommande universelle.
@@ -17,8 +18,7 @@ typedef struct {
     double (*get_balance)(void* context, int account_id);
 
     // Fonction pour transférer de l'argent entre deux IDs
-    bool (*transfer)(void* context, int from_id, int to_id, double amount);
-
+    BankStatus (*transfer)(void* context, int from_id, int to_id, double amount);
 } BankDriver;
 
 #endif // BANK_INTERFACE_H

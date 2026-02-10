@@ -11,6 +11,7 @@ typedef struct {
     int id;
     char owner[100];
     double balance;
+    unsigned long pin_hash;
     
     // Un tableau qui stocke les tickets. C'est le carnet de chèques.
     Transaction history[MAX_HISTORY]; 
@@ -19,7 +20,7 @@ typedef struct {
     // ----------------
 } Account;
 
-Account create_account(int id, const char* owner);
+Account create_account(int id, const char* owner, const char* pin); 
 
 // Ajoute un montant au solde du compte.
 // Prend un pointeur (Account*) pour modifier la structure originale.

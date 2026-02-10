@@ -81,11 +81,11 @@ void setup_test_accounts(BankDriver* driver) {
     db->count = 0;
 
     // Création compte Alice (ID 1001) avec 100€
-    Account alice = create_account(1001, "Alice");
+    Account alice = create_account(1001, "Alice", "1234");
     deposit(&alice, 100.0);
     db->accounts[db->count++] = alice;
 
     // Création compte Bob (ID 1002) avec 0€
-    Account bob = create_account(1002, "Bob");
+    Account bob = create_account(1002, "Bob", "0000");
     db->accounts[db->count++] = bob;
 }

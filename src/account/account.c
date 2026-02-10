@@ -1,16 +1,21 @@
 #include "account.h"
 #include <string.h>
+#include "../auth/auth.h"
 
-Account create_account(int id, const char* owner) {
+Account create_account(int id, const char* owner, const char* pin) {
     Account new_account;
     new_account.id = id;
     new_account.balance = 0.0;
     
+    // Hachage du PIN à la création
+    new_account.pin_hash = hash_pin(pin); // <--- On stocke le hash
+    
     // Initialiser le compteur de transactions à 0 (historique vide)
+    
     new_account.transaction_count = 0;
-
     strncpy(new_account.owner, owner, sizeof(new_account.owner) - 1);
     new_account.owner[sizeof(new_account.owner) - 1] = '\0';
+    
     return new_account;
 }
 

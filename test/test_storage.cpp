@@ -16,10 +16,10 @@ TEST_CASE("CSV Driver saves and loads accounts correctly", "[storage][csv]") {
     StorageDriver storage = create_csv_driver(filename);
 
     Account accounts_to_save[2];
-    accounts_to_save[0] = create_account(1, "Batman");
+    accounts_to_save[0] = create_account(1, "Batman", "9999");
     deposit(&accounts_to_save[0], 1000.0);
     
-    accounts_to_save[1] = create_account(2, "Robin");
+    accounts_to_save[1] = create_account(2, "Robin", "8888");
     // Robin a 0.0
 
     // WHEN : On sauvegarde (Save)
@@ -39,6 +39,7 @@ TEST_CASE("CSV Driver saves and loads accounts correctly", "[storage][csv]") {
     REQUIRE(accounts_loaded[0].id == 1);
     REQUIRE(strcmp(accounts_loaded[0].owner, "Batman") == 0);
     REQUIRE(accounts_loaded[0].balance == 1000.0);
+	REQUIRE(accounts_loaded[0].pin_hash == accounts_to_save[0].pin_hash);
 
     REQUIRE(accounts_loaded[1].id == 2);
     REQUIRE(strcmp(accounts_loaded[1].owner, "Robin") == 0);

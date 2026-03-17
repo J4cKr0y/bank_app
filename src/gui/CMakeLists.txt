@@ -10,7 +10,10 @@ add_executable(bank_gui
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
-    ../main.c 
+    dashboard.cpp 
+    dashboard.h 
+    dashboard.ui 
+    ../main.c
 )
 
 target_link_libraries(bank_gui PRIVATE 

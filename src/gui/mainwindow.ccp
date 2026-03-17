@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include <QMessageBox>
+#include "dashboard.h" 
 
 // Inclusion des fonctions C
 extern "C" {
@@ -31,6 +32,18 @@ void MainWindow::on_loginButton_clicked()
 {
     QString idStr = ui->idInput->text();
     QString pinStr = ui->pinInput->text();
+
+    if (verify_pin(db->accounts[i].pin_hash, pinStr.toStdString().c_str())) {
+        // Cacher la fenêtre de login
+        this->hide();
+        
+        // Ouvrir le Dashboard
+        Dashboard dash(bank, id, this);
+        dash.exec(); // Bloquant jusqu'à la fermeture du dashboard
+        
+        // Réafficher le login après déconnexion
+        this->show();
+    }
 
     if (idStr.isEmpty() || pinStr.isEmpty()) {
         QMessageBox::warning(this, "Champs vides", "Veuillez remplir tous les champs.");

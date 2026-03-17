@@ -177,7 +177,6 @@ int main() {
             // On affiche le message d'erreur précis grâce à notre helper
             printf("❌ Échec : %s\n", get_status_message(status));
         }
-    }
 
             } else if (choice == 3) {
                 current_user_id = -1;

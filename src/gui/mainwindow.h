@@ -7,6 +7,7 @@
 extern "C" {
     #include "../system/bank_interface.h"
     #include "../system/memory_driver.h"
+	#include "../persistence/storage_interface.h"
 }
 
 QT_BEGIN_NAMESPACE
@@ -26,5 +27,9 @@ private slots:
 private:
     Ui::MainWindow *ui;
     BankDriver bank; // Notre moteur en C 
+	StorageDriver storage; // Interface de stockage
+	
+protected:
+    void closeEvent(QCloseEvent *event) override;
 };
 #endif

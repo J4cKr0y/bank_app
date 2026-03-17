@@ -18,6 +18,7 @@ add_executable(bank_gui
 
 target_link_libraries(bank_gui PRIVATE 
     Qt6::Widgets
+	Qt6::Gui
     system_lib
     persistence_lib
     common_lib

@@ -24,6 +24,13 @@
     </layout>
    </item>
    <item>
+ <widget class="QListWidget" name="historyList">
+  <property name="toolTip">
+   <string>Dernières opérations</string>
+  </property>
+ </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="transferButton">
      <property name="text"><string>Effectuer Virement</string></property>
     </widget>

@@ -1,6 +1,7 @@
 #include "memory_driver.h"
 #include "../account/account.h"
 #include <stdio.h>
+#include <stdbool.h>
 
 // --- Fonctions internes (cachées) ---
 
@@ -86,10 +87,21 @@ void setup_test_accounts(BankDriver* driver) {
 }
 
 // Permet d'ajouter un compte existant dans la mémoire du driver (utile au chargement)
-void driver_add_account(BankDriver* driver, Account account) {
+bool driver_add_account(BankDriver* driver, Account account) {
     MemoryDatabase* db = (MemoryDatabase*)driver->context;
-    if (db->count < MAX_ACCOUNTS) {
-        db->accounts[db->count] = account; // Copie le compte
-        db->count++;
+	// 1. SECURITE : Vérifier si l'ID existe déjà
+    for (int i = 0; i < db->count; i++) {
+        if (db->accounts[i].id == account.id) {
+            return false; // ID déjà utilisé !
+        }
     }
+
+    // 2. Vérifier si la base n'est pas pleine
+    if (db->count < MAX_ACCOUNTS) {
+        db->accounts[db->count] = account;
+        db->count++;
+        return true;
+    }
+    
+    return false; // Base pleine
 }

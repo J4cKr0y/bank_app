@@ -4,20 +4,24 @@
 
 Account create_account(int id, const char* owner, const char* pin) {
     Account new_account;
+    
+    // 1. SECURITE : On met toute la structure à zéro
+    memset(&new_account, 0, sizeof(Account));
+    
     new_account.id = id;
     new_account.balance = 0.0;
-    
-    // Hachage du PIN à la création
-    new_account.pin_hash = hash_pin(pin); // <--- On stocke le hash
-    
-    // Initialiser le compteur de transactions à 0 (historique vide)
-    
     new_account.transaction_count = 0;
+    
+    // 2. Utilisation du hachage pour le PIN
+    new_account.pin_hash = hash_pin(pin);
+    
+    // 3. Copie sécurisée du nom du propriétaire
     strncpy(new_account.owner, owner, sizeof(new_account.owner) - 1);
     new_account.owner[sizeof(new_account.owner) - 1] = '\0';
     
     return new_account;
 }
+
 
 void deposit(Account* account, double amount) {
     if (amount > 0) {

@@ -19,6 +19,6 @@ BankDriver create_memory_driver();
 void setup_test_accounts(BankDriver* driver);
 
 // Permet d'ajouter un compte existant dans la mémoire du driver (utile au chargement)
-void driver_add_account(BankDriver* driver, Account account);
+bool driver_add_account(BankDriver* driver, Account account);
 
 #endif // MEMORY_DRIVER_H

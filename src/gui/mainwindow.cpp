@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include "dashboard.h" 
 #include <QCloseEvent>
+#include <QInputDialog>
 
 // Inclusion des fonctions C
 extern "C" {
@@ -95,4 +96,29 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     }
 
     event->accept(); // On autorise la fermeture
+}
+
+void MainWindow::on_registerButton_clicked() {
+    bool ok;
+    
+    // 1. Saisie des informations
+    QString name = QInputDialog::getText(this, "Inscription", "Nom du titulaire :", QLineEdit::Normal, "", &ok);
+    if (!ok || name.isEmpty()) return;
+
+    int newId = QInputDialog::getInt(this, "Inscription", "ID du compte :", 1000, 1, 99999, 1, &ok);
+    if (!ok) return;
+
+    QString pin = QInputDialog::getText(this, "Sécurité", "Code PIN :", QLineEdit::Password, "", &ok);
+    if (!ok || pin.isEmpty()) return;
+
+    // 2. On utilise la fonction de création du moteur C 
+    // On convertit les QString en const char* pour le C
+    Account newAcc = create_account(newId, name.toStdString().c_str(), pin.toStdString().c_str());
+
+    // 3. Tentative d'ajout
+    if (driver_add_account(&bank, newAcc)) {
+        QMessageBox::information(this, "Succès", "Le compte a été créé avec succès !");
+    } else {
+        QMessageBox::warning(this, "Erreur", "Impossible de créer le compte (ID déjà pris ou base pleine).");
+    }
 }

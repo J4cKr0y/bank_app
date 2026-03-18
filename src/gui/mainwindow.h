@@ -23,6 +23,7 @@ public:
 
 private slots:
     void on_loginButton_clicked(); // Quand on clique sur "Connexion"
+	void on_registerButton_clicked(); // inscription
 
 private:
     Ui::MainWindow *ui;

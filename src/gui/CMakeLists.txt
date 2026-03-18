@@ -4,21 +4,22 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 # On cherche Qt6
-find_package(Qt6 COMPONENTS Widgets REQUIRED)
+find_package(Qt6 COMPONENTS Widgets Gui PrintSupport REQUIRED)
 
 add_executable(bank_gui
+    main.cpp
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
     dashboard.cpp 
     dashboard.h 
     dashboard.ui 
-    ../main.c
 )
 
 target_link_libraries(bank_gui PRIVATE 
     Qt6::Widgets
 	Qt6::Gui
+	Qt6::PrintSupport
     system_lib
     persistence_lib
     common_lib

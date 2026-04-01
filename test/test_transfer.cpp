@@ -2,27 +2,22 @@
 
 extern "C" {
     #include "system/bank_interface.h"
-    #include "system/memory_driver.h" // On a besoin du constructeur du driver
+    #include "system/memory_driver.h"
+    #include "common/status.h"
 }
 
 TEST_CASE("Transfer via Interface moves funds correctly", "[transfer][interface]") {
-    // GIVEN : On initialise notre "Système Maison" (Driver Mémoire)
-    // C'est ici qu'on "branche" notre système actuel.
     BankDriver bank = create_memory_driver();
-
-    // On prépare le terrain (on triche un peu pour injecter des comptes dans notre mémoire)
-    // Dans un vrai système, on utiliserait bank.create_account(...)
-    setup_test_accounts(&bank); 
+    setup_test_accounts(&bank);
 
     // Vérifions l'état initial (Alice a 100, Bob a 0)
-    REQUIRE(bank.get_balance(bank.context, 1001) == 100.0); // Alice
-    REQUIRE(bank.get_balance(bank.context, 1002) == 0.0);   // Bob
+    REQUIRE(bank.get_balance(bank.context, 1001) == 100.0);
+    REQUIRE(bank.get_balance(bank.context, 1002) == 0.0);
 
     // WHEN : On effectue un virement via l'INTERFACE générique
-    bool result = bank.transfer(bank.context, 1001, 1002, 40.0);
+    REQUIRE(bank.transfer(bank.context, 1001, 1002, 40.0) == STATUS_SUCCESS);
 
-    // THEN : Le virement réussit et les soldes sont mis à jour
-    REQUIRE(result == true);
+    // THEN : Les soldes sont mis à jour
     REQUIRE(bank.get_balance(bank.context, 1001) == 60.0); // 100 - 40
     REQUIRE(bank.get_balance(bank.context, 1002) == 40.0); // 0 + 40
 }
@@ -32,9 +27,8 @@ TEST_CASE("Transfer fails if source account has insufficient funds", "[transfer]
     setup_test_accounts(&bank);
 
     // WHEN : Alice essaie de virer 500 (elle n'a que 100)
-    bool result = bank.transfer(bank.context, 1001, 1002, 500.0);
+    REQUIRE(bank.transfer(bank.context, 1001, 1002, 500.0) == ERR_INSUFFICIENT_FUNDS);
 
-    // THEN : Échec et rien ne bouge
-    REQUIRE(result == false);
+    // THEN : Rien ne bouge
     REQUIRE(bank.get_balance(bank.context, 1001) == 100.0);
 }

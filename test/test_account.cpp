@@ -1,5 +1,6 @@
+#define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-#include <cstring> // Pour strcmp (comparaison de texte)
+#include <cstring>
 
 extern "C" {
     #include "account/account.h"
@@ -15,6 +16,8 @@ TEST_CASE("Account creation initializes values correctly", "[account]") {
     REQUIRE(account.id == account_id);
     REQUIRE(strcmp(account.owner, client_name) == 0);
     REQUIRE(account.balance == 0.0);
+
+    free_account(&account);
 }
 
 TEST_CASE("Deposit increases account balance", "[account]") {
@@ -25,15 +28,18 @@ TEST_CASE("Deposit increases account balance", "[account]") {
 
     deposit(&account, 50.0);
     REQUIRE(account.balance == 150.0);
+
+    free_account(&account);
 }
 
 TEST_CASE("Withdraw decreases account balance when funds are sufficient", "[account]") {
     Account account = create_account(1, "Bob", "0000");
     deposit(&account, 200.0);
 
-    // On compare directement au code de statut, pas à un bool
     REQUIRE(withdraw(&account, 50.0) == STATUS_SUCCESS);
     REQUIRE(account.balance == 150.0);
+
+    free_account(&account);
 }
 
 TEST_CASE("Withdraw fails when funds are insufficient", "[account]") {
@@ -42,17 +48,21 @@ TEST_CASE("Withdraw fails when funds are insufficient", "[account]") {
 
     REQUIRE(withdraw(&account, 50.0) == ERR_INSUFFICIENT_FUNDS);
     REQUIRE(account.balance == 20.0);
+
+    free_account(&account);
 }
 
 TEST_CASE("Cannot deposit or withdraw negative amounts", "[account][edge_case]") {
     Account account = create_account(1, "Bob", "0000");
     deposit(&account, 100.0);
 
-    deposit(&account, -50.0); // Ne devrait rien faire
+    deposit(&account, -50.0);
     REQUIRE(account.balance == 100.0);
 
     REQUIRE(withdraw(&account, -10.0) == ERR_INVALID_AMOUNT);
     REQUIRE(account.balance == 100.0);
+
+    free_account(&account);
 }
 
 TEST_CASE("Deposit adds a transaction to history", "[account][history]") {
@@ -65,6 +75,8 @@ TEST_CASE("Deposit adds a transaction to history", "[account][history]") {
     REQUIRE(account.transaction_count == 1);
     REQUIRE(account.history[0].type == DEPOSIT);
     REQUIRE(account.history[0].amount == 100.0);
+
+    free_account(&account);
 }
 
 TEST_CASE("Withdraw returns precise error codes", "[account][error]") {
@@ -73,6 +85,8 @@ TEST_CASE("Withdraw returns precise error codes", "[account][error]") {
 
     REQUIRE(withdraw(&acc, 20.0) == STATUS_SUCCESS);
     REQUIRE(withdraw(&acc, 1000.0) == ERR_INSUFFICIENT_FUNDS);
-    REQUIRE(acc.balance == 30.0); // Le solde n'a pas bougé (50 - 20)
+    REQUIRE(acc.balance == 30.0);
     REQUIRE(withdraw(&acc, -5.0) == ERR_INVALID_AMOUNT);
+
+    free_account(&acc);
 }

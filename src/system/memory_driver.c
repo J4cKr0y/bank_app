@@ -72,16 +72,22 @@ static BankStatus memory_transfer(void* context, int from_id, int to_id, double 
 // --- Constructeur du Driver ---
 
 BankDriver create_memory_driver() {
-    static MemoryDatabase db;
-    db.count = 0;
+    // On alloue la structure de contrôle sur le tas (heap)
+    MemoryDatabase* db = (MemoryDatabase*)malloc(sizeof(MemoryDatabase));
+    if (db == NULL) return (BankDriver){0}; 
 
-    // ALLOCATION INITIALE du tableau de comptes
-    db.capacity = 10;
-    db.accounts = (Account*)malloc(db.capacity * sizeof(Account));
+    db->count = 0;
+    db->capacity = 10;
+    
+    // On alloue le tableau initial de comptes
+    db->accounts = (Account*)malloc(db->capacity * sizeof(Account));
+    if (db->accounts == NULL) {
+        free(db);
+        return (BankDriver){0};
+    }
 
     BankDriver driver;
-    driver.context = &db;
-
+    driver.context = db; // Le driver pointe maintenant vers une zone mémoire unique
     driver.get_balance = memory_get_balance;
     driver.transfer    = memory_transfer;
 
@@ -90,17 +96,32 @@ BankDriver create_memory_driver() {
 
 // FERMETURE DE LA BANQUE — libère toute la mémoire allouée dynamiquement
 void free_memory_driver(BankDriver* driver) {
+    if (driver == NULL || driver->context == NULL) return;
+
     MemoryDatabase* db = (MemoryDatabase*)driver->context;
+
     if (db->accounts != NULL) {
-        // On libère d'abord l'historique de CHAQUE compte
+        // 1. Libérer l'historique de chaque compte individuel
         for (int i = 0; i < db->count; i++) {
             free_account(&db->accounts[i]);
         }
-        // Puis on libère le grand tableau des comptes
+        // 2. Libérer le tableau de structures Account
         free(db->accounts);
-        db->accounts = NULL;
-        db->count    = 0;
-        db->capacity = 0;
+    }
+    
+    // 3. ENFIN : Libérer le conteneur lui-même
+    free(db); 
+    driver->context = NULL;
+}
+
+
+// Fonction interne pour vider la base sans détruire le driver
+static void clear_database_records(MemoryDatabase* db) {
+    if (db->accounts != NULL) {
+        for (int i = 0; i < db->count; i++) {
+            free_account(&db->accounts[i]); // On libère les historiques[cite: 1, 6]
+        }
+        db->count = 0;
     }
 }
 
@@ -108,19 +129,14 @@ void free_memory_driver(BankDriver* driver) {
 void setup_test_accounts(BankDriver* driver) {
     MemoryDatabase* db = (MemoryDatabase*)driver->context;
 
-    // On libère proprement l'état précédent avant de reset
-    free_memory_driver(driver);
+    // On vide les données existantes proprement sans "tuer" le driver
+    clear_database_records(db);
 
-    db->capacity = 10;
-    db->accounts = (Account*)malloc(db->capacity * sizeof(Account));
-    db->count    = 0;
-
-    // Création compte Alice (ID 1001) avec 100€
+    // Ajout des comptes de test
     Account alice = create_account(1001, "Alice", "1234");
     deposit(&alice, 100.0);
     driver_add_account(driver, alice);
 
-    // Création compte Bob (ID 1002) avec 0€
     Account bob = create_account(1002, "Bob", "0000");
     driver_add_account(driver, bob);
 }

@@ -44,6 +44,13 @@
       </property>
      </widget>
     </item>
+	<item>
+ <widget class="QPushButton" name="registerButton">
+  <property name="text">
+   <string>Créer un nouveau compte</string>
+  </property>
+ </widget>
+</item>
    </layout>
   </widget>
  </widget>

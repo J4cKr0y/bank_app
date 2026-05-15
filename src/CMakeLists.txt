@@ -10,6 +10,7 @@ add_subdirectory(auth)
 add_subdirectory(system)
 add_subdirectory(persistence)
 add_subdirectory(common)
+add_subdirectory(gui)
 
 # 2. On crée la bibliothèque de base (Utilitaires : Tri et Recherche).
 # Cette bibliothèque regroupe les outils algorithmiques du projet.

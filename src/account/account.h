@@ -7,19 +7,16 @@
 
 #include "../common/status.h"
 
-#define MAX_HISTORY 100 // On limite l'historique à 100 opérations pour l'instant
-
 typedef struct {
     int id;
     char owner[100];
     double balance;
     unsigned long pin_hash;
     
-    // Un tableau qui stocke les tickets. C'est le carnet de chèques.
-    Transaction history[MAX_HISTORY]; 
-    // Un compteur pour savoir combien de pages du carnet sont remplies.
+    // --- Historique dynamique ---
+    Transaction* history; 
     int transaction_count;
-    // ----------------
+    int history_capacity;
 } Account;
 
 Account create_account(int id, const char* owner, const char* pin); 
@@ -31,5 +28,8 @@ void deposit(Account* account, double amount);
 // Tente de retirer un montant.
 // Retourne true si succès, false si fonds insuffisants ou montant invalide.
 BankStatus withdraw(Account* account, double amount);
+
+// Fonction de nettoyage
+void free_account(Account* account);
 
 #endif // ACCOUNT_H

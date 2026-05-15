@@ -2,32 +2,89 @@
 <ui version="4.0">
  <class>Dashboard</class>
  <widget class="QDialog" name="Dashboard">
-  <property name="windowTitle"><string>Mon Compte - My Bank</string></property>
-  <property name="geometry"><rect><x>0</x><y>0</y><width>400</width><height>300</height></rect></property>
+  <property name="windowTitle">
+   <string>Mon Compte - My Bank</string>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>450</height>
+   </rect>
+  </property>
   <layout class="QVBoxLayout" name="mainLayout">
    <item>
     <widget class="QLabel" name="welcomeLabel">
-     <property name="text"><string>Bienvenue, Utilisateur</string></property>
-     <property name="font"><font><pointsize>14</pointsize><bold>true</bold></font></property>
+     <property name="text">
+      <string>Bienvenue, Utilisateur</string>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
     </widget>
    </item>
    <item>
     <widget class="QLabel" name="balanceLabel">
-     <property name="text"><string>Solde : 0.00 €</string></property>
+     <property name="text">
+      <string>Solde : 0.00 €</string>
+     </property>
     </widget>
    </item>
-   <item><widget class="line" name="line"/></item>
+   <item>
+    <widget class="QFrame" name="line">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QListWidget" name="historyList">
+     <property name="toolTip">
+      <string>Dernières opérations</string>
+     </property>
+    </widget>
+   </item>
    <item>
     <layout class="QHBoxLayout" name="transferLayout">
-     <item><widget class="QLineEdit" name="destInput"><property name="placeholderText"><string>ID Destinataire</string></property></widget></item>
-     <item><widget class="QLineEdit" name="amountInput"><property name="placeholderText"><string>Montant</string></property></widget></item>
+     <item>
+      <widget class="QLineEdit" name="destInput">
+       <property name="placeholderText">
+        <string>ID Destinataire</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="amountInput">
+       <property name="placeholderText">
+        <string>Montant</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
     <widget class="QPushButton" name="transferButton">
-     <property name="text"><string>Effectuer Virement</string></property>
+     <property name="text">
+      <string>Effectuer Virement</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pdfButton">
+     <property name="text">
+      <string>📄 Exporter le Relevé (PDF)</string>
+     </property>
     </widget>
    </item>
   </layout>
  </widget>
+ <resources/>
+ <connections/>
 </ui>

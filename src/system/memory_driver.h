@@ -4,12 +4,12 @@
 #include "bank_interface.h"
 #include "../account/account.h"
 
-#define MAX_ACCOUNTS 100 // Augmentons un peu la limite au passage
-
 // Déplacé ici pour que le main.c puisse "voir" le type de données
 typedef struct {
-    Account accounts[MAX_ACCOUNTS];
+    // --- Base de données dynamique ---
+    Account* accounts; 
     int count;
+    int capacity;
 } MemoryDatabase;
 
 // Crée et configure le driver "En Mémoire"
@@ -19,6 +19,9 @@ BankDriver create_memory_driver();
 void setup_test_accounts(BankDriver* driver);
 
 // Permet d'ajouter un compte existant dans la mémoire du driver (utile au chargement)
-void driver_add_account(BankDriver* driver, Account account);
+bool driver_add_account(BankDriver* driver, Account account);
+
+// Fonction de nettoyage global
+void free_memory_driver(BankDriver* driver);
 
 #endif // MEMORY_DRIVER_H
